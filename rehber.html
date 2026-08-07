@@ -680,8 +680,26 @@
         const printBtn = document.getElementById('printBtn');
 
         // State
-        let records = JSON.parse(localStorage.getItem('records')) || [];
+        // State
+        let records = JSON.parse(localStorage.getItem('dahili_records')) || [];
         let currentSort = { field: 'date', order: 'desc' };
+
+        // Hafıza boşsa GitHub'daki CSV dosyasını çek
+        if (records.length === 0) {
+    fetch('rehber-test-50.csv')
+        .then(response => {
+            if (!response.ok) throw new Error('CSV çekilemedi');
+            return response.text();
+        })
+        .then(csvText => {
+            processCSV(csvText); // Mevcut CSV işleme fonksiyonun
+        })
+        .catch(err => console.log('Test verisi yüklenemedi:', err));
+} else {
+    renderTable();
+}
+
+initTheme();
         
         // Undo state
         let deletedRecordsCache = [];
