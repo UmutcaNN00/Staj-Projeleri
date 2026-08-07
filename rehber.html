@@ -680,7 +680,7 @@
         const printBtn = document.getElementById('printBtn');
 
         // State
-        let records = JSON.parse(localStorage.getItem('dahili_records')) || [];
+        localStorage.setItem('records', JSON.stringify(records));
         let currentSort = { field: 'date', order: 'desc' };
         
         // Undo state
@@ -977,7 +977,7 @@
 
         // Helper Functions
         function saveRecords() {
-            localStorage.setItem('dahili_records', JSON.stringify(records));
+            localStorage.setItem('records', JSON.stringify(records));
         }
 
         // Sorting Logic
