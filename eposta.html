@@ -59,8 +59,16 @@
             align-items: center;
             max-width: 95%;
             margin: 0 auto 1.5rem auto;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
         
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
         .header-actions {
             display: flex;
             gap: 1rem;
@@ -70,6 +78,45 @@
         h1 {
             font-size: 1.75rem;
             font-weight: 600;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            gap: 0.5rem;
+            background-color: var(--container-bg);
+            padding: 0.3rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+        
+        .nav-tab {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            color: var(--secondary-text);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .nav-tab:hover {
+            color: var(--text-color);
+        }
+        
+        .nav-tab.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
         }
 
         .theme-toggle {
@@ -176,10 +223,21 @@
         }
         
         input[type="checkbox"] {
-            width: 1rem;
-            height: 1rem;
+            width: 1.2rem;
+            height: 1.2rem;
             cursor: pointer;
             accent-color: var(--primary-color);
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s ease;
+        }
+
+        input[type="checkbox"]:active {
+            transform: scale(0.85);
+        }
+
+        input[type="checkbox"]:checked {
+            transform: scale(1.1);
+            box-shadow: 0 0 8px 1px rgba(0, 113, 227, 0.4);
+            border-radius: 4px;
         }
 
         button {
@@ -263,7 +321,7 @@
         
         .bulk-actions {
             display: flex;
-            gap: 0.5rem;
+            gap: 1rem;
             width: 100%;
             padding: 0.75rem 1rem;
             background-color: rgba(0, 113, 227, 0.1);
@@ -271,6 +329,14 @@
             margin-bottom: 1rem;
             align-items: center;
             justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        
+        .bulk-actions-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            align-items: center;
         }
 
         [data-theme="dark"] .bulk-actions {
@@ -382,12 +448,12 @@
             background-color: rgba(134, 134, 139, 0.15);
         }
         
-        tbody td:not(:last-child) {
+        tbody td:not(:first-child):not(:last-child) {
             cursor: pointer;
             position: relative;
         }
         
-        tbody td:not(:last-child):hover::after {
+        tbody td:not(:first-child):not(:last-child):hover::after {
             content: "Kopyala";
             position: absolute;
             top: 50%;
@@ -403,7 +469,7 @@
             transition: opacity 0.2s;
         }
         
-        tbody td:not(:last-child):hover::after {
+        tbody td:not(:first-child):not(:last-child):hover::after {
             opacity: 1;
         }
 
@@ -491,14 +557,22 @@
 </head>
 <body>
     <div class="header">
-        <h1>Kayıt Sistemi</h1>
+        <div class="header-left">
+            <h1>Kayıt Sistemi</h1>
+            <div class="nav-tabs">
+                <button class="nav-tab active" data-target="contactsTab">Kişiler</button>
+                <button class="nav-tab" data-target="templatesTab">Taslaklar</button>
+            </div>
+        </div>
         <div class="header-actions">
             <button class="btn-secondary" id="printBtn">🖨️ Yazdır / PDF</button>
             <button class="theme-toggle" id="themeToggle" aria-label="Temayı Değiştir">🌙</button>
         </div>
     </div>
     
-    <div class="container">
+    <!-- KİŞİLER SEKMESİ -->
+    <div id="contactsTab" class="tab-content active">
+        <div class="container">
         <div class="card">
             <h2 id="formTitle">Yeni Kayıt Ekle</h2>
             <form id="recordForm">
@@ -557,9 +631,13 @@
         <div class="card">
             <div id="bulkActions" class="bulk-actions hidden">
                 <span id="selectedCountText">0 kayıt seçildi</span>
-                <div>
-                    <button class="btn-secondary" id="bulkExportBtn" style="background-color: var(--container-bg); margin-right: 0.5rem;">Seçilenleri İndir</button>
-                    <button class="btn-danger" id="bulkDeleteBtn">Seçilenleri Sil</button>
+                <div class="bulk-actions-buttons">
+                    <button class="btn-primary" id="bulkEmailBtn" style="margin-top: 0; padding: 0.4rem 0.8rem; height: 32px; box-shadow: none; display: flex; align-items: center; gap: 0.4rem;">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        E-Posta Gönder
+                    </button>
+                    <button class="btn-secondary" id="bulkExportBtn" style="background-color: var(--container-bg); height: 32px;">İndir</button>
+                    <button class="btn-danger" id="bulkDeleteBtn" style="height: 32px;">Sil</button>
                 </div>
             </div>
 
@@ -620,6 +698,106 @@
                 </div>
             </div>
         </div>
+        </div>
+    </div>
+    
+    <!-- TASLAKLAR SEKMESİ -->
+    <div id="templatesTab" class="tab-content">
+        <div class="container" style="grid-template-columns: 1fr; max-width: 900px;">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h2>Kayıtlı Taslaklar</h2>
+                    <button class="btn-primary" id="openTemplateModalBtn" style="width: auto; margin-top: 0;">+ Yeni Taslak</button>
+                </div>
+                <div class="table-container">
+                    <table id="templatesTable">
+                        <thead>
+                            <tr>
+                                <th>Taslak Adı</th>
+                                <th>Konu</th>
+                                <th style="width: 150px;">İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody id="templatesTableBody">
+                            <!-- Taslaklar buraya gelecek -->
+                        </tbody>
+                    </table>
+                    <div id="emptyTemplatesState" class="empty-state">
+                        Henüz hiçbir taslak bulunmuyor. Yeni bir tane oluşturarak başlayın.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TASLAK OLUŞTUR / DÜZENLE MODAL -->
+    <div id="templateFormModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 3000; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+        <div class="card" style="width: 90%; max-width: 700px; max-height: 90vh; overflow-y: auto; padding: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2 id="templateFormTitle" style="margin: 0;">Yeni Taslak Oluştur</h2>
+                <button class="btn-secondary" id="closeTemplateModalBtn" style="padding: 0.2rem 0.6rem;">✕</button>
+            </div>
+            
+            <form id="templateForm">
+                <input type="hidden" id="templateId">
+                
+                <div class="form-group">
+                    <label for="templateName">Taslak Adı <span style="color: var(--danger-color);">*</span></label>
+                    <input type="text" id="templateName" required placeholder="Örn: Fiyat Teklifi İsteme">
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label for="templateTo">Sabit Kime (Opsiyonel)</label>
+                        <input type="text" id="templateTo" placeholder="Örn: satis@sirket.com">
+                        <small style="color: var(--secondary-text); font-size: 0.75rem; display: block; margin-top: 0.3rem;">Birden fazla e-posta için aralarına virgül (,) koyun.</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="templateCc">Bilgi / CC (Opsiyonel)</label>
+                        <input type="text" id="templateCc" placeholder="Örn: yonetici@sirket.com">
+                        <small style="color: var(--secondary-text); font-size: 0.75rem; display: block; margin-top: 0.3rem;">Birden fazla e-posta için aralarına virgül (,) koyun.</small>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="templateSubject">Konu <span style="color: var(--danger-color);">*</span></label>
+                    <input type="text" id="templateSubject" required placeholder="Örn: Fiyat Teklifi Hk.">
+                </div>
+                
+                <div class="form-group">
+                    <label for="templateBody">Mesaj İçeriği <span style="color: var(--danger-color);">*</span></label>
+                    <textarea id="templateBody" required rows="10" style="width: 100%; padding: 0.8rem; border: 1px solid var(--input-border); border-radius: var(--input-radius); background-color: var(--input-bg); color: var(--text-color); font-size: 0.9rem; outline: none; resize: vertical; line-height: 1.5;" placeholder="Merhaba,&#10;&#10;İlgili ürünleriniz için fiyat teklifinizi rica ederiz.&#10;&#10;İyi çalışmalar."></textarea>
+                </div>
+                
+                <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem;">
+                    <button type="button" class="btn-secondary" id="cancelTemplateBtn">İptal</button>
+                    <button type="submit" class="btn-primary" id="submitTemplateBtn" style="margin-top: 0; width: auto;">Taslağı Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- E-POSTA GÖNDER MODAL -->
+    <div id="emailModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+        <div class="card" style="width: 90%; max-width: 500px; max-height: 90vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2 style="margin: 0;">Taslak ile E-Posta Gönder</h2>
+                <button class="btn-secondary" id="closeModalBtn" style="padding: 0.2rem 0.6rem;">✕</button>
+            </div>
+            
+            <p style="margin-bottom: 1rem; font-size: 0.85rem; color: var(--secondary-text);">
+                Seçili <strong id="modalSelectedCount">0</strong> kişiye gönderilecek. Lütfen bir taslak seçin:
+            </p>
+            
+            <div id="modalTemplatesList" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <!-- Modal içi taslak listesi buraya dolacak -->
+            </div>
+            
+            <div id="modalEmptyState" class="empty-state hidden">
+                Kayıtlı taslak bulunmuyor. Önce "Taslaklar" sekmesinden taslak oluşturun.
+            </div>
+        </div>
     </div>
 
     <div id="toast" class="toast">
@@ -645,6 +823,24 @@
         const emptyState = document.getElementById('emptyState');
         const recordsTable = document.getElementById('recordsTable');
         
+        // Template Elements
+        const templateFormModal = document.getElementById('templateFormModal');
+        const openTemplateModalBtn = document.getElementById('openTemplateModalBtn');
+        const closeTemplateModalBtn = document.getElementById('closeTemplateModalBtn');
+        const templateForm = document.getElementById('templateForm');
+        const templateIdInput = document.getElementById('templateId');
+        const templateNameInput = document.getElementById('templateName');
+        const templateToInput = document.getElementById('templateTo');
+        const templateCcInput = document.getElementById('templateCc');
+        const templateSubjectInput = document.getElementById('templateSubject');
+        const templateBodyInput = document.getElementById('templateBody');
+        const templateFormTitle = document.getElementById('templateFormTitle');
+        const submitTemplateBtn = document.getElementById('submitTemplateBtn');
+        const cancelTemplateBtn = document.getElementById('cancelTemplateBtn');
+        const templatesTableBody = document.getElementById('templatesTableBody');
+        const emptyTemplatesState = document.getElementById('emptyTemplatesState');
+        const templatesTable = document.getElementById('templatesTable');
+        
         const searchInput = document.getElementById('searchInput');
         const filterCategory = document.getElementById('filterCategory');
         const exportBtn = document.getElementById('exportBtn');
@@ -657,14 +853,23 @@
         const selectedCountText = document.getElementById('selectedCountText');
         const bulkDeleteBtn = document.getElementById('bulkDeleteBtn');
         const bulkExportBtn = document.getElementById('bulkExportBtn');
+        const bulkEmailBtn = document.getElementById('bulkEmailBtn');
         const fileInput = document.getElementById('fileInput');
+
+        // Modal Elements
+        const emailModal = document.getElementById('emailModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const modalSelectedCount = document.getElementById('modalSelectedCount');
+        const modalTemplatesList = document.getElementById('modalTemplatesList');
+        const modalEmptyState = document.getElementById('modalEmptyState');
 
         const undoBtn = document.getElementById('undoBtn');
         const toastMessage = document.getElementById('toastMessage');
         const printBtn = document.getElementById('printBtn');
 
         // State
-        let records = JSON.parse(localStorage.getItem('kayit_records')) || [];
+        localStorage.setItem('records', JSON.stringify(records));
+        let templates = JSON.parse(localStorage.getItem('templates')) || [];
         let currentSort = { field: 'date', order: 'desc' };
         
         // Undo state
@@ -673,21 +878,35 @@
         
         // Initial render
         renderTable();
+        renderTemplatesTable();
         initTheme();
         
+        // Tab Handling
+        const navTabs = document.querySelectorAll('.nav-tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        navTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                navTabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+                
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.target).classList.add('active');
+            });
+        });
+
         // Print
         printBtn.addEventListener('click', () => {
             window.print();
         });
 
-        // Auto Phone Formatting
+        // Auto Phone Formatting (Flexible)
         phoneInput.addEventListener('input', function (e) {
-            let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
-            if (!x[1]) {
-                e.target.value = '';
-                return;
-            }
-            e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? ' ' + x[3] : '') + (x[4] ? ' ' + x[4] : '');
+            // İzin verilen karakterler: Rakamlar, artı, tire, parantez ve boşluk
+            let val = e.target.value;
+            // Sadece izin verilen karakterleri tutalım
+            val = val.replace(/[^\d\+\-\s\(\)]/g, '');
+            e.target.value = val;
         });
 
         // Theme Handling
@@ -722,7 +941,7 @@
             let existingRecord = records.find(r => r.id === id);
             
             const record = {
-                id: id ? id : Date.now().toString(),
+                id: id ? id : crypto.randomUUID(),
                 name: nameInput.value.trim(),
                 email: emailInput.value.trim(),
                 company: companyInput.value.trim(),
@@ -758,6 +977,88 @@
         filterCategory.addEventListener('change', () => {
             renderTable();
         });
+
+        // Email Modal & Sending Logic
+        bulkEmailBtn.addEventListener('click', () => {
+            const checkedBoxes = document.querySelectorAll('.row-checkbox:checked');
+            if (checkedBoxes.length === 0) return;
+            
+            modalSelectedCount.textContent = checkedBoxes.length;
+            renderModalTemplates();
+            emailModal.style.display = 'flex';
+        });
+
+        closeModalBtn.addEventListener('click', () => {
+            emailModal.style.display = 'none';
+        });
+        
+        emailModal.addEventListener('click', (e) => {
+            if (e.target === emailModal) {
+                emailModal.style.display = 'none';
+            }
+        });
+
+        function renderModalTemplates() {
+            modalTemplatesList.innerHTML = '';
+            
+            if (templates.length === 0) {
+                modalEmptyState.classList.remove('hidden');
+            } else {
+                modalEmptyState.classList.add('hidden');
+                
+                templates.forEach(template => {
+                    const btn = document.createElement('button');
+                    btn.className = 'btn-secondary';
+                    btn.style.cssText = 'justify-content: flex-start; padding: 1rem; text-align: left; background-color: var(--input-bg); border-color: var(--border-color);';
+                    
+                    btn.innerHTML = `
+                        <div style="font-weight: 600; font-size: 0.95rem; margin-bottom: 0.2rem; color: var(--text-color);">${escapeHtml(template.name)}</div>
+                        <div style="font-size: 0.8rem; color: var(--secondary-text);">${escapeHtml(template.subject)}</div>
+                    `;
+                    
+                    btn.addEventListener('click', () => sendBulkEmail(template));
+                    modalTemplatesList.appendChild(btn);
+                });
+            }
+        }
+
+        function sendBulkEmail(template) {
+            const checkedBoxes = document.querySelectorAll('.row-checkbox:checked');
+            const selectedIds = Array.from(checkedBoxes).map(cb => cb.value);
+            
+            // Collect emails from selected records
+            const selectedRecords = records.filter(r => selectedIds.includes(r.id));
+            const recordEmails = selectedRecords.map(r => r.email).filter(email => email);
+            
+            // Combine with template specific static emails if any
+            let allToEmails = [...recordEmails];
+            if (template.to) {
+                const staticEmails = template.to.split(',').map(e => e.trim()).filter(e => e);
+                allToEmails = [...allToEmails, ...staticEmails];
+            }
+            
+            if (allToEmails.length === 0) {
+                alert('Seçili kişilerin veya taslağın geçerli bir e-posta adresi bulunmuyor.');
+                return;
+            }
+            
+            // Remove duplicates
+            allToEmails = [...new Set(allToEmails)];
+            
+            const toAddresses = allToEmails.join(',');
+            const mailtoLink = generateMailtoLink(toAddresses, template.cc, template.subject, template.body);
+            
+            // Open default mail client
+            window.location.href = mailtoLink;
+            
+            // Close modal & Uncheck all
+            emailModal.style.display = 'none';
+            selectAllCheckbox.checked = false;
+            document.querySelectorAll('.row-checkbox').forEach(cb => cb.checked = false);
+            updateBulkActionsVisibility();
+            
+            showToast('E-Posta penceresi açılıyor...');
+        }
 
         // Bulk Actions Logic
         function updateBulkActionsVisibility() {
@@ -949,7 +1250,7 @@
                 }
 
                 records.unshift({
-                    id: Date.now().toString() + importCount, // Ensure unique ID during fast loop
+                    id: crypto.randomUUID(),
                     name: name.trim(),
                     email: email.trim(),
                     company: company.trim(),
@@ -976,9 +1277,35 @@
             }
         }
 
+        // Outlook Mailto Generator
+        function generateMailtoLink(toAddresses, ccAddresses, subject, body) {
+            let mailto = `mailto:${encodeURIComponent(toAddresses)}`;
+            
+            const params = [];
+            if (ccAddresses) {
+                params.push(`cc=${encodeURIComponent(ccAddresses)}`);
+            }
+            if (subject) {
+                params.push(`subject=${encodeURIComponent(subject)}`);
+            }
+            if (body) {
+                params.push(`body=${encodeURIComponent(body)}`);
+            }
+            
+            if (params.length > 0) {
+                mailto += `?${params.join('&')}`;
+            }
+            
+            return mailto;
+        }
+
         // Helper Functions
         function saveRecords() {
-            localStorage.setItem('kayit_records', JSON.stringify(records));
+            localStorage.setItem('records', JSON.stringify(records));
+        }
+        
+        function saveTemplates() {
+            localStorage.setItem('templates', JSON.stringify(templates));
         }
 
         // Sorting Logic
@@ -1013,6 +1340,119 @@
             return map[val] || map['diger'];
         }
 
+        // Templates Logic
+        openTemplateModalBtn.addEventListener('click', () => {
+            resetTemplateForm();
+            templateFormModal.style.display = 'flex';
+        });
+
+        closeTemplateModalBtn.addEventListener('click', () => {
+            templateFormModal.style.display = 'none';
+        });
+
+        cancelTemplateBtn.addEventListener('click', () => {
+            templateFormModal.style.display = 'none';
+        });
+
+        templateFormModal.addEventListener('click', (e) => {
+            if (e.target === templateFormModal) {
+                templateFormModal.style.display = 'none';
+            }
+        });
+
+        templateForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const id = templateIdInput.value;
+            
+            const template = {
+                id: id ? id : crypto.randomUUID(),
+                name: templateNameInput.value.trim(),
+                to: templateToInput.value.trim(),
+                cc: templateCcInput.value.trim(),
+                subject: templateSubjectInput.value.trim(),
+                body: templateBodyInput.value.trim()
+            };
+
+            if (id) {
+                const index = templates.findIndex(t => t.id === id);
+                if (index !== -1) {
+                    templates[index] = template;
+                }
+            } else {
+                templates.unshift(template);
+            }
+
+            saveTemplates();
+            renderTemplatesTable();
+            templateFormModal.style.display = 'none';
+            showToast('Taslak kaydedildi!');
+        });
+        
+        function resetTemplateForm() {
+            templateForm.reset();
+            templateIdInput.value = '';
+            templateFormTitle.textContent = 'Yeni Taslak Oluştur';
+            submitTemplateBtn.textContent = 'Taslağı Kaydet';
+        }
+        
+        window.editTemplate = function(id) {
+            const template = templates.find(t => t.id === id);
+            if (template) {
+                templateIdInput.value = template.id;
+                templateNameInput.value = template.name;
+                templateToInput.value = template.to;
+                templateCcInput.value = template.cc;
+                templateSubjectInput.value = template.subject;
+                templateBodyInput.value = template.body;
+                
+                templateFormTitle.textContent = 'Taslağı Düzenle';
+                submitTemplateBtn.textContent = 'Güncelle';
+                
+                templateFormModal.style.display = 'flex';
+                templateNameInput.focus();
+            }
+        };
+        
+        window.deleteTemplate = function(id) {
+            if(confirm('Bu taslağı silmek istediğinize emin misiniz?')) {
+                templates = templates.filter(t => t.id !== id);
+                saveTemplates();
+                if (templateIdInput.value === id) {
+                    resetTemplateForm();
+                }
+                renderTemplatesTable();
+                showToast('Taslak silindi!');
+            }
+        };
+
+        function renderTemplatesTable() {
+            templatesTableBody.innerHTML = '';
+            
+            if (templates.length === 0) {
+                emptyTemplatesState.classList.remove('hidden');
+                templatesTable.classList.add('hidden');
+            } else {
+                emptyTemplatesState.classList.add('hidden');
+                templatesTable.classList.remove('hidden');
+                
+                templates.forEach(template => {
+                    const tr = document.createElement('tr');
+                    tr.dataset.id = template.id;
+                    
+                    tr.innerHTML = `
+                        <td><strong>${escapeHtml(template.name)}</strong></td>
+                        <td>${escapeHtml(template.subject)}</td>
+                        <td style="white-space: nowrap;">
+                            <button class="btn-edit" onclick="editTemplate('${template.id}')">Düzenle</button>
+                            <button class="btn-danger" onclick="deleteTemplate('${template.id}')">Sil</button>
+                        </td>
+                    `;
+                    templatesTableBody.appendChild(tr);
+                });
+            }
+        }
+
         function renderTable() {
             tableBody.innerHTML = '';
             
@@ -1035,8 +1475,10 @@
                 let valA = a[currentSort.field] || '';
                 let valB = b[currentSort.field] || '';
                 
-                if (typeof valA === 'string') valA = valA.toLowerCase();
-                if (typeof valB === 'string') valB = valB.toLowerCase();
+                if (typeof valA === 'string' && typeof valB === 'string') {
+                    const comparison = valA.localeCompare(valB, 'tr', { sensitivity: 'base' });
+                    return currentSort.order === 'asc' ? comparison : -comparison;
+                }
                 
                 if (valA < valB) return currentSort.order === 'asc' ? -1 : 1;
                 if (valA > valB) return currentSort.order === 'asc' ? 1 : -1;
@@ -1195,7 +1637,7 @@
         undoBtn.addEventListener('click', () => {
             if (deletedRecordsCache.length > 0) {
                 // Restore records
-                records.push(...deletedRecordsCache);
+                records.unshift(...deletedRecordsCache);
                 deletedRecordsCache = []; // clear cache
                 
                 saveRecords();
