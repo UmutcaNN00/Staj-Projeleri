@@ -1247,6 +1247,7 @@ initTheme();
                 let company = values[2] || '';
                 let categoryName = values[3] || '';
                 let phone = values[4] || '';
+                let dateStr = values[5] || '';
                 
                 // Try reverse mapping category
                 let category = 'diger';
@@ -1266,6 +1267,18 @@ initTheme();
                     continue;
                 }
 
+                // Parse date string (DD.MM.YYYY to ISO)
+                let isoDate = new Date().toISOString();
+                if (dateStr.trim()) {
+                    const parts = dateStr.trim().split('.');
+                    if (parts.length === 3) {
+                        const parsedDate = new Date(`${parts[2]}-${parts[1]}-${parts[0]}T12:00:00Z`);
+                        if (!isNaN(parsedDate)) {
+                            isoDate = parsedDate.toISOString();
+                        }
+                    }
+                }
+
                 records.unshift({
                     id: crypto.randomUUID(),
                     name: name.trim(),
@@ -1273,7 +1286,7 @@ initTheme();
                     company: company.trim(),
                     phone: phone.trim(),
                     category: category,
-                    date: new Date().toISOString()
+                    date: isoDate
                 });
                 importCount++;
             }
@@ -1318,7 +1331,7 @@ initTheme();
 
         // Helper Functions
         function saveRecords() {
-            localStorage.setItem('records', JSON.stringify(records));
+            localStorage.setItem('kayit_records', JSON.stringify(records));
         }
         
         function saveTemplates() {
