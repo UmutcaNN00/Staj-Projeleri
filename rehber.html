@@ -680,7 +680,7 @@
         const printBtn = document.getElementById('printBtn');
 
         // State
-        localStorage.setItem('records', JSON.stringify(records));
+        let records = JSON.parse(localStorage.getItem('records')) || [];
         let currentSort = { field: 'date', order: 'desc' };
         
         // Undo state
