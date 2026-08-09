@@ -868,8 +868,8 @@
         const printBtn = document.getElementById('printBtn');
 
         // State
-        // State
         let records = JSON.parse(localStorage.getItem('kayit_records')) || [];
+        let templates = JSON.parse(localStorage.getItem('templates')) || [];
         let currentSort = { field: 'date', order: 'desc' };
 
         // Hafıza boşsa GitHub'daki CSV dosyasını çek
