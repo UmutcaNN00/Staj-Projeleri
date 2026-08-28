@@ -4,22 +4,301 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Staj Projeleri - Umutcan Demir</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f9; padding: 50px; display: flex; justify-content: center; align-items: center; height: 80vh; margin: 0;}
-        .container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; max-width: 500px; width: 100%; }
-        h1 { color: #2c3e50; font-size: 24px; margin-bottom: 10px; }
-        p { color: #7f8c8d; margin-bottom: 30px; font-size: 15px; }
-        a.btn { display: block; margin: 15px 0; padding: 15px; background-color: #3498db; color: white; text-decoration: none; border-radius: 8px; font-size: 16px; font-weight: bold; transition: background 0.3s; }
-        a.btn:hover { background-color: #2980b9; }
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-gradient: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --btn-bg: white;
+            --btn-border: #e5e7eb;
+            --badge-bg: rgba(255, 255, 255, 0.85);
+            --badge-border: rgba(255, 255, 255, 0.6);
+        }
+
+        body.dark-mode {
+            --bg-gradient: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+            --card-bg: rgba(31, 41, 55, 0.95);
+            --text-main: #f9fafb;
+            --text-muted: #9ca3af;
+            --btn-bg: #374151;
+            --btn-border: #4b5563;
+            --badge-bg: rgba(31, 41, 55, 0.85);
+            --badge-border: rgba(75, 85, 99, 0.6);
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--bg-gradient);
+            background-size: 400% 400%;
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0;
+            color: var(--text-main);
+            transition: background 0.5s ease;
+        }
+
+        .container { 
+            background: var(--card-bg); 
+            padding: 50px 40px; 
+            border-radius: 24px; 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.05); 
+            text-align: center; 
+            max-width: 480px; 
+            width: 90%; 
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--badge-border);
+            transition: transform 0.3s ease, background 0.5s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+        }
+
+        .profile-icon {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, var(--primary), #818cf8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px auto;
+            color: white;
+            font-size: 36px;
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+        }
+
+        h1 { 
+            font-weight: 700; 
+            font-size: 28px; 
+            margin: 0 0 8px 0; 
+            letter-spacing: -0.5px;
+        }
+        
+        p { 
+            color: var(--text-muted); 
+            margin: 0 0 35px 0; 
+            font-size: 16px; 
+            font-weight: 300;
+            line-height: 1.5;
+        }
+
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        a.btn { 
+            display: flex; 
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 16px 20px; 
+            background-color: var(--btn-bg); 
+            color: var(--text-main); 
+            text-decoration: none; 
+            border-radius: 12px; 
+            font-size: 16px; 
+            font-weight: 600; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border: 1px solid var(--btn-border);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            position: relative;
+            overflow: hidden;
+        }
+
+        a.btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary);
+            z-index: 0;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s ease-out;
+        }
+
+        a.btn:hover::before {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        a.btn i {
+            font-size: 20px;
+            z-index: 1;
+            color: var(--primary);
+            transition: color 0.3s ease;
+        }
+
+        a.btn span {
+            z-index: 1;
+            transition: color 0.3s ease;
+        }
+
+        a.btn:hover i, a.btn:hover span {
+            color: white;
+        }
+
+        .btn:hover { 
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.2);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            margin-top: 40px;
+            font-size: 14px;
+            color: #9ca3af;
+        }
+        
+        .footer a {
+            color: #9ca3af;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 18px;
+            transition: color 0.2s;
+        }
+        
+        .footer a:hover {
+            color: var(--primary);
+        }
+
+        .university-badge {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            background: var(--badge-bg);
+            backdrop-filter: blur(8px);
+            padding: 12px 16px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            font-size: 13px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid var(--badge-border);
+            line-height: 1.4;
+            transition: transform 0.3s, box-shadow 0.3s, background 0.5s, border-color 0.5s;
+            z-index: 10;
+            text-align: left;
+        }
+
+        .university-badge i {
+            font-size: 24px;
+            color: var(--primary);
+        }
+
+        .university-badge strong {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .university-badge:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background: var(--badge-bg);
+            border: 1px solid var(--badge-border);
+            color: var(--text-main);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s, background 0.5s, border-color 0.5s, color 0.5s;
+            z-index: 10;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-3px) rotate(15deg);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            color: var(--primary);
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Umutcan Demir</h1>
-        <p>Büyük Veri Analistliği Staj Projeleri Portfolyosu</p>
-        
-        <a href="rehber.html" class="btn">📞 ONKA Dahili Telefon Rehberi</a>
-        <a href="eposta.html" class="btn">✉️ E-Posta Kayıt Sistemi</a>
+    <div class="university-badge">
+        <i class="fa-solid fa-building-columns"></i>
+        <div>
+            <strong>Zonguldak Bülent Ecevit Üniversitesi</strong><br>
+            Bilişim Teknolojileri Meslek Yüksekokulu
+        </div>
     </div>
+
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Dark Mode">
+        <i class="fa-solid fa-moon"></i>
+    </button>
+
+    <div class="container">
+        <div class="profile-icon">
+            <i class="fa-solid fa-chart-pie"></i>
+        </div>
+        <h1>Umutcan Demir</h1>
+        <p>Büyük Veri Analistliği<br>Staj Projeleri Portfolyosu</p>
+        
+        <div class="btn-container">
+            <a href="rehber.html" class="btn">
+                <i class="fa-solid fa-address-book"></i>
+                <span>ONKA Dahili Telefon Rehberi</span>
+            </a>
+            <a href="eposta.html" class="btn">
+                <i class="fa-solid fa-envelope-open-text"></i>
+                <span>E-Posta Kayıt Sistemi</span>
+            </a>
+        </div>
+        
+        <div class="footer">
+            <a href="https://github.com/UmutcaNN00" target="_blank" title="GitHub Profilim"><i class="fa-brands fa-github"></i></a>
+            <!-- LinkedIn link eklenebilir, varsa buraya ekleyebilirsiniz -->
+        </div>
+    </div>
+
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const icon = themeToggle.querySelector('i');
+        const body = document.body;
+
+        // Check for saved theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            body.classList.add('dark-mode');
+            icon.classList.replace('fa-moon', 'fa-sun');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                icon.classList.replace('fa-moon', 'fa-sun');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.classList.replace('fa-sun', 'fa-moon');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+    </script>
 </body>
 </html>
